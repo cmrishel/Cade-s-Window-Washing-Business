@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Request a wash</title><link rel="stylesheet" href="/style.css"></head><body><header><nav><b>Cade's Window Washing</b><a href="/">Home</a><a href="/book.html">Request a wash</a></nav></header><main>
+<h1>Request a wash</h1><p>We'll confirm your date and final price. You pay after the job.</p>
+<form method="post" action="/api/book">
+<label>Name<input name="name" required></label>
+<div class="row"><label>Phone<input name="phone" type="tel" required></label><label>Email<input name="email" type="email" required></label></div>
+<label>Address (Boise or Eagle)<input name="address" required></label>
+<div class="row"><label>Small windows ($5 each)<input id="s" name="small" type="number" min="0" value="0"></label><label>Standard/large windows ($10 each)<input id="t" name="standard" type="number" min="0" value="0"></label></div>
+<p id="est" aria-live="polite"></p>
+<div class="row"><label>Preferred date<input name="pref_date" type="date" required></label><label>Time of day<select name="pref_time"><option>Any time</option><option>Morning</option><option>Afternoon</option></select></label></div>
+<label>Notes (gates, pets, second stories)<textarea name="notes" rows="3"></textarea></label>
+<input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+<button>Send request</button></form></main>
+<script>const P=5,Q=10,MIN=50,e=document.getElementById('est');function u(){const n=(+s.value||0)*P+(+t.value||0)*Q;e.textContent=n?'Estimate: $'+Math.max(n,MIN)+' (final price confirmed by us)':''}s.oninput=t.oninput=u</script></body></html>
