@@ -1,7 +1,0 @@
-name = "window-washing"
-pages_build_output_dir = "public"
-compatibility_date = "2024-09-01"
-[[d1_databases]]
-binding = "DB"
-database_name = "window-washing"
-database_id = "8c7a04af-3fca-4b37-9754-8c9b0706d950"
