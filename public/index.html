@@ -1,9 +1,24 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Exterior Window Washing in Boise &amp; Eagle</title><link rel="stylesheet" href="/style.css"></head><body><header><nav><b>Cade's Window Washing</b><a href="/">Home</a><a href="/book.html">Request a wash</a></nav></header><main>
-<h1>Clean exterior windows, priced per window.</h1>
-<p>Serving Boise and Eagle, Idaho. Tracks and screens are cleaned with every window, at no extra charge.</p>
-<p><a class="btn" href="/book.html">Request a wash</a></p>
-<h2>Pricing</h2>
-<div class="rate"><p><span>Small window</span><b>$5</b></p><p><span>Standard or large window</span><b>$10</b></p><p><span>Minimum visit</span><b>$50</b></p></div>
-<h2>How it works</h2>
-<ol><li>Tell us your window counts and preferred day.</li><li>We confirm the date and final price by phone or email.</li><li>We wash. You pay after the job is done.</li></ol>
-<p>Exterior washing only.</p></main><footer>Questions? Call or text: (208) 480-2233</footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bookings</title><link rel="stylesheet" href="/style.css"><meta name="robots" content="noindex">
+<style>.c{background:var(--sky);border-left:6px solid var(--sun);padding:.8rem 1rem;margin:.8rem 0;border-radius:4px}.c.old{opacity:.55;border-left-color:#999}.c h3{margin:0;font:700 1.1rem system-ui}.c p{margin:.3rem 0}.l a{display:inline-block;margin:.3rem .5rem .3rem 0;font:600 15px system-ui}.c button{padding:.45rem .8rem;margin:.2rem .3rem .2rem 0;font-size:14px}.d{font:700 .95rem system-ui;margin-top:1.4rem;color:var(--deep)}</style></head>
+<body><main><h1>Bookings</h1><div id="b"></div></main>
+<script>
+const box=document.getElementById('b');
+async function act(id,body){await fetch('/api/admin',{method:'PATCH',body:JSON.stringify({id,...body})});load()}
+function el(t,tx,cl){const e=document.createElement(t);if(tx)e.textContent=tx;if(cl)e.className=cl;return e}
+function link(tx,href){const a=el('a',tx);a.href=href;return a}
+function btn(l,f){const b=el('button',l);b.onclick=f;return b}
+async function load(){const r=await (await fetch('/api/admin')).json();box.replaceChildren();
+const live=x=>x.status==='requested'||x.status==='confirmed';
+r.sort((a,b)=>(live(b)-live(a))||String(a.pref_date).localeCompare(b.pref_date));
+let last='';
+for(const x of r){const ds=x.pref_date?new Date(x.pref_date+'T12:00').toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}):'No date';
+if(live(x)&&ds!==last){box.append(el('div',ds,'d'));last=ds}else if(!live(x)&&last!=='old'){box.append(el('div','Completed / cancelled','d'));last='old'}
+const c=el('div','', 'c'+(live(x)?'':' old'));
+c.append(el('h3',`${x.name} · $${x.estimate}`),el('p',`${x.pref_time} · ${x.small} small, ${x.standard} standard · ${x.status}${x.paid?' · PAID':''}`),el('p',x.address));
+if(x.notes)c.append(el('p','Notes: '+x.notes));
+const tel=String(x.phone).replace(/[^\d+]/g,''),l=el('div','','l');
+l.append(link('Directions','https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(x.address)),link('Call','tel:'+tel),link('Text','sms:'+tel),link('Email','mailto:'+x.email));
+c.append(l,btn('Confirm',()=>act(x.id,{status:'confirmed'})),btn('Done',()=>act(x.id,{status:'completed'})),btn('Paid',()=>act(x.id,{paid:1})),btn('Cancel',()=>act(x.id,{status:'cancelled'})));
+box.append(c)}
+if(!r.length)box.append(el('p','No requests yet.'))}
+load()</script></body></html>
