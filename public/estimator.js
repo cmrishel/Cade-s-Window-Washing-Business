@@ -10,11 +10,17 @@
     return r ? Number(r.value) : 1;
   }
 
+  // colors the filled part of a slider's track
+  function paint(el) {
+    el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%');
+  }
+
   function update() {
     var small = Number(smallSlider.value);
     var standard = Number(standardSlider.value);
     var stories = getStories();
 
+    paint(smallSlider); paint(standardSlider);
     $('e-small-v').textContent = small;
     $('e-standard-v').textContent = standard;
 
