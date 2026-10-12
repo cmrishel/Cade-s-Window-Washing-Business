@@ -1,11 +1,24 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cade's Window Washing | Exterior Window Washing in Boise &amp; Eagle</title><link rel="stylesheet" href="/style.css"></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cade's Window Washing | Exterior Window Washing in Boise &amp; Eagle</title><meta name="description" content="Exterior window washing in Boise and Eagle, Idaho, priced per window. Get an instant estimate and request a date online. Tracks and screens included."><link rel="stylesheet" href="/style.css"></head><body>
 <header><nav><b>Cade's Window Washing</b><a href="/">Home</a><a href="/book.html">Request a wash</a></nav></header><main>
 <h1>Clean exterior windows, priced per window.</h1>
 <p>Serving Boise and Eagle, Idaho. Tracks and screens are cleaned with every window, at no extra charge.</p>
-<p><a class="btn" href="/book.html">Request a wash</a></p>
+
+<section class="est-card" aria-labelledby="est-title">
+<h2 id="est-title">Get an instant estimate</h2>
+<fieldset class="seg-wrap"><legend>Home height</legend>
+<div class="seg"><label><input type="radio" name="stories" value="1" checked><span>1 story</span></label><label><input type="radio" name="stories" value="2"><span>2 story</span></label></div>
+</fieldset>
+<div class="est-row"><div class="est-top"><label for="e-small">Small windows</label><output id="e-small-v" for="e-small">2</output></div><input type="range" id="e-small" min="0" max="40" value="2"></div>
+<div class="est-row"><div class="est-top"><label for="e-standard">Standard / large windows</label><output id="e-standard-v" for="e-standard">10</output></div><input type="range" id="e-standard" min="0" max="40" value="10"></div>
+<div class="est-result" aria-live="polite"><span>Estimated price</span><b id="e-price">$0</b></div>
+<p class="est-note" id="e-note"></p>
+<a class="btn" id="e-book" href="/book.html">Book now</a>
+</section>
+
 <h2>Pricing</h2>
-<div class="rate"><p><span>Small window</span><b>$5</b></p><p><span>Standard or large window</span><b>$10</b></p><p><span>Minimum visit</span><b>$50</b></p></div>
+<div class="rate"><p><span>Small window</span><b data-price="small">$5</b></p><p><span>Standard or large window</span><b data-price="standard">$10</b></p><p><span>2-story home, extra per window</span><b data-price="twoStoryExtra">$2</b></p><p><span>Minimum visit</span><b data-price="minimum">$50</b></p></div>
 <h2>How it works</h2>
 <ol><li>Tell us your window counts and preferred day.</li><li>We confirm the date and final price by phone or email.</li><li>We wash. You pay after the job is done.</li></ol>
 <p>Exterior washing only.</p></main>
-<footer>Questions? Call or text: <a href="tel:2084802233">(208) 480-2233</a></footer></body></html>
+<footer>Questions? Call or text: <a href="tel:2084802233">(208) 480-2233</a></footer>
+<script src="/pricing.js"></script><script src="/estimator.js"></script></body></html>

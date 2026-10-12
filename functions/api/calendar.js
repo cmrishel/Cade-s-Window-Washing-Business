@@ -15,7 +15,7 @@ export async function onRequestGet({ request, env }) {
     const tag = b.status === 'requested' ? '[Requested] ' : b.status === 'completed' ? '[Done] ' : '';
     lines.push('BEGIN:VEVENT', `UID:booking-${b.id}@window-washing`, `DTSTAMP:${stamp}`, `DTSTART:${d}T${s}`, `DTEND:${d}T${e}`,
       `SUMMARY:${esc(`${tag}${b.name} - $${b.estimate}`)}`, `LOCATION:${esc(b.address)}`,
-      `DESCRIPTION:${esc(`${b.phone}\n${b.small} small, ${b.standard} standard\nTime wanted: ${b.pref_time}\n${b.notes || ''}\nDirections: ${maps}`)}`,
+      `DESCRIPTION:${esc(`${b.phone}\n${b.small} small, ${b.standard} standard, ${b.stories === 2 ? '2' : '1'}-story\nTime wanted: ${b.pref_time}\n${b.notes || ''}\nDirections: ${maps}`)}`,
       `STATUS:${b.status === 'requested' ? 'TENTATIVE' : 'CONFIRMED'}`, 'END:VEVENT');
   }
   lines.push('END:VCALENDAR');

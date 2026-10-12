@@ -14,3 +14,27 @@ input,select,textarea{font:inherit;padding:.6rem;border:1px solid var(--deep);bo
 #est{font:700 1.3rem system-ui}:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 table{border-collapse:collapse;width:100%;font:14px system-ui}td,th{border-bottom:1px solid var(--sky);padding:.5rem;text-align:left;vertical-align:top}
 @media(max-width:560px){.row{grid-template-columns:1fr}}
+
+/* ---------- 1 story / 2 story toggle (home page box + booking form) ---------- */
+.seg-wrap{border:0;padding:0;margin:0}.seg-wrap legend{padding:0;margin-bottom:.35rem;font:600 .95rem system-ui,sans-serif}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--bg);border:1px solid var(--deep);border-radius:10px}
+.seg label{position:relative;display:block;gap:0}
+.seg input{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer}
+.seg span{display:block;padding:.55rem 0;text-align:center;font:600 1rem system-ui,sans-serif;border-radius:8px;opacity:.65}
+.seg input:checked+span{background:var(--sun);color:#12262d;opacity:1}
+.seg input:focus-visible+span{outline:3px solid var(--deep);outline-offset:1px}
+
+/* ---------- Estimate box on the home page ---------- */
+.est-card{max-width:380px;margin:1.5rem 0;padding:1.1rem 1.2rem 1.2rem;background:var(--sky);border:2px solid var(--deep);border-radius:12px;font-family:system-ui,sans-serif}
+.est-card h2{margin:0 0 .9rem;font-size:1.2rem}
+.est-card .seg-wrap{margin-bottom:1rem}
+.est-row{margin-bottom:.9rem}
+.est-top{display:flex;justify-content:space-between;align-items:baseline;gap:.75rem}
+.est-top label{display:block}
+.est-top output{font:700 1.3rem system-ui,sans-serif}
+.est-card input[type=range]{display:block;width:100%;height:28px;margin:.3rem 0 0;padding:0;border:0;background:none;accent-color:var(--deep);cursor:pointer}
+.est-result{display:flex;justify-content:space-between;align-items:center;margin-top:.4rem;padding:.7rem .9rem;background:var(--bg);border-radius:10px;font-weight:600}
+.est-result b{font-size:2rem;line-height:1}
+.est-note{margin:.5rem .1rem 0;font-size:.82rem;opacity:.85}
+.est-card .btn{display:block;width:100%;margin-top:.9rem;padding:.85rem 1rem;text-align:center;font-size:1.05rem}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}

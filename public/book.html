@@ -4,10 +4,45 @@
 <label>Name<input name="name" required></label>
 <div class="row"><label>Phone<input name="phone" type="tel" required></label><label>Email<input name="email" type="email" required></label></div>
 <label>Address (Boise or Eagle)<input name="address" required></label>
-<div class="row"><label>Small windows ($5 each)<input id="s" name="small" type="number" min="0" value="0"></label><label>Standard/large windows ($10 each)<input id="t" name="standard" type="number" min="0" value="0"></label></div>
+<fieldset class="seg-wrap"><legend>Home height</legend>
+<div class="seg"><label><input type="radio" name="stories" value="1" checked><span>1 story</span></label><label><input type="radio" name="stories" value="2"><span>2 story</span></label></div>
+</fieldset>
+<div class="row"><label>Small windows (<span data-price="small">$5</span> each)<input id="s" name="small" type="number" min="0" max="200" value="0"></label><label>Standard/large windows (<span data-price="standard">$10</span> each)<input id="t" name="standard" type="number" min="0" max="200" value="0"></label></div>
 <p id="est" aria-live="polite"></p>
-<div class="row"><label>Preferred date<input name="pref_date" type="date" required></label><label>Time of day<select name="pref_time"><option>Any time</option><option>Morning</option><option>Afternoon</option></select></label></div>
-<label>Notes (gates, pets, second stories)<textarea name="notes" rows="3"></textarea></label>
+<div class="row"><label>Preferred date<input id="d" name="pref_date" type="date" required></label><label>Time of day<select name="pref_time"><option>Any time</option><option>Morning</option><option>Afternoon</option></select></label></div>
+<label>Notes (gates, pets, anything we should know)<textarea name="notes" rows="3"></textarea></label>
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button>Send request</button></form></main>
-<script>const P=5,Q=10,MIN=50,e=document.getElementById('est');function u(){const n=(+s.value||0)*P+(+t.value||0)*Q;e.textContent=n?'Estimate: $'+Math.max(n,MIN)+' (final price confirmed by us)':''}s.oninput=t.oninput=u</script></body></html>
+<script src="/pricing.js"></script>
+<script>
+(function () {
+  var s = document.getElementById('s'), t = document.getElementById('t'), est = document.getElementById('est');
+
+  function getStories() {
+    var r = document.querySelector('input[name="stories"]:checked');
+    return r ? Number(r.value) : 1;
+  }
+  function whole(v) { var n = parseInt(v, 10); return isNaN(n) ? 0 : Math.min(Math.max(n, 0), 200); }
+
+  function update() {
+    var small = whole(s.value), standard = whole(t.value);
+    if (!small && !standard) { est.textContent = ''; return; }
+    est.textContent = 'Estimate: $' + window.calcQuote(small, standard, getStories()).price + ' (final price confirmed by us)';
+  }
+
+  // Fill the form from the home page estimate box (if they came from there)
+  var q = new URLSearchParams(location.search);
+  if (q.has('small')) { s.value = whole(q.get('small')); }
+  if (q.has('standard')) { t.value = whole(q.get('standard')); }
+  if (q.get('stories') === '2') { document.querySelector('input[name="stories"][value="2"]').checked = true; }
+
+  // Don't allow dates in the past
+  var now = new Date();
+  document.getElementById('d').min = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+  s.addEventListener('input', update);
+  t.addEventListener('input', update);
+  document.querySelectorAll('input[name="stories"]').forEach(function (r) { r.addEventListener('change', update); });
+  update();
+})();
+</script></body></html>

@@ -14,7 +14,7 @@ let last='';
 for(const x of r){const ds=x.pref_date?new Date(x.pref_date+'T12:00').toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}):'No date';
 if(live(x)&&ds!==last){box.append(el('div',ds,'d'));last=ds}else if(!live(x)&&last!=='old'){box.append(el('div','Completed / cancelled','d'));last='old'}
 const c=el('div','', 'c'+(live(x)?'':' old'));
-c.append(el('h3',`${x.name} · $${x.estimate}`),el('p',`${x.pref_time} · ${x.small} small, ${x.standard} standard · ${x.status}${x.paid?' · PAID':''}`),el('p',x.address));
+c.append(el('h3',`${x.name} · $${x.estimate}`),el('p',`${x.pref_time} · ${x.small} small, ${x.standard} standard · ${x.stories==2?'2':'1'}-story · ${x.status}${x.paid?' · PAID':''}`),el('p',x.address));
 if(x.notes)c.append(el('p','Notes: '+x.notes));
 const tel=String(x.phone).replace(/[^\d+]/g,''),l=el('div','','l');
 l.append(link('Directions','https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(x.address)),link('Call','tel:'+tel),link('Text','sms:'+tel),link('Email','mailto:'+x.email));
