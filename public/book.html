@@ -1,48 +1,62 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Request a wash</title><link rel="stylesheet" href="/style.css"></head><body><header><nav><b>Cade's Window Washing</b><a href="/">Home</a><a href="/book.html">Request a wash</a></nav></header><main>
-<h1>Request a wash</h1><p>We'll confirm your date and final price. You pay after the job.</p>
-<form method="post" action="/api/book">
-<label>Name<input name="name" required></label>
-<div class="row"><label>Phone<input name="phone" type="tel" required></label><label>Email<input name="email" type="email" required></label></div>
-<label>Address (Boise or Eagle)<input name="address" required></label>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book a wash | Sightline Window Cleaning</title><link rel="stylesheet" href="/style.css"></head><body><header><nav><a class="brand" href="/">Sightline <span>Window Cleaning</span></a><a class="nav-cta" href="/book.html">Book a wash</a></nav></header><main>
+<h1>Book a wash</h1>
+<p class="lead">Choose your windows and a day. We confirm your booking and the final price. You pay after the job.</p>
+<form method="post" action="/api/book" id="book-form">
+
+<section class="fsec"><h2 class="fh">1. Your windows</h2>
+<div class="quote" data-quote data-prefill>
+<div class="q-layout">
+<div class="q-controls">
+<fieldset class="seg-wrap"><legend>Service</legend>
+<div class="seg"><label><input type="radio" name="service" value="exterior" checked><span>Exterior</span></label><label><input type="radio" name="service" value="interior"><span>Interior<em>Soon</em></span></label></div></fieldset>
 <fieldset class="seg-wrap"><legend>Home height</legend>
-<div class="seg"><label><input type="radio" name="stories" value="1" checked><span>1 story</span></label><label><input type="radio" name="stories" value="2"><span>2 story</span></label></div>
-</fieldset>
-<div class="row"><label>Small windows (<span data-price="small">$5</span> each)<input id="s" name="small" type="number" min="0" max="200" value="0"></label><label>Standard/large windows (<span data-price="standard">$10</span> each)<input id="t" name="standard" type="number" min="0" max="200" value="0"></label></div>
-<p id="est" aria-live="polite"></p>
-<div class="row"><label>Preferred date<input id="d" name="pref_date" type="date" required></label><label>Time of day<select name="pref_time"><option>Any time</option><option>Morning</option><option>Afternoon</option></select></label></div>
+<div class="seg"><label><input type="radio" name="stories" value="1" checked><span>1 story</span></label><label><input type="radio" name="stories" value="2"><span>2 story</span></label><label><input type="radio" name="stories" value="3"><span>3 story<em>Soon</em></span></label></div></fieldset>
+<div class="q-sliders" data-sliders>
+<div class="q-row"><div class="q-top"><label for="q-small">Small windows</label><output data-out="small" for="q-small">2</output></div><input type="range" id="q-small" name="small" min="0" max="40" value="2"></div>
+<div class="q-row"><div class="q-top"><label for="q-standard">Standard / large windows</label><output data-out="standard" for="q-standard">10</output></div><input type="range" id="q-standard" name="standard" min="0" max="40" value="10"></div>
+</div>
+<div class="q-soon" data-soon hidden><b>Coming soon</b><p data-soon-text></p></div>
+</div>
+<div class="q-action"><div class="q-result" aria-live="polite"><span>Estimate</span><b data-out="price">$0</b></div></div>
+</div>
+</div></section>
+
+<section class="fsec"><h2 class="fh">2. Pick a day and time</h2>
+<div class="sched" id="sched">
+<div class="sched-in">
+<div class="cal">
+<div class="cal-head"><button type="button" class="cal-nav" id="cal-prev" aria-label="Previous month">&#8249;</button><div class="cal-title" id="cal-title" aria-live="polite"></div><button type="button" class="cal-nav" id="cal-next" aria-label="Next month">&#8250;</button></div>
+<div class="cal-grid" id="cal-grid"></div>
+</div>
+<div class="times"><div class="times-head" id="times-head">Pick a day to see times</div><div class="time-list" id="time-list"></div></div>
+</div>
+<input type="hidden" name="pref_date" id="pref_date"><input type="hidden" name="pref_time" id="pref_time">
+</div>
+<p class="sched-msg" id="sched-msg" role="status"></p>
+<p class="fine">Monday to Friday. Grayed-out days and times aren't available.</p>
+</section>
+
+<section class="fsec"><h2 class="fh">3. Your details</h2>
+<div class="fields">
+<label>Name<input name="name" autocomplete="name" required></label>
+<div class="row"><label>Phone<input name="phone" type="tel" autocomplete="tel" required></label><label>Email<input name="email" type="email" autocomplete="email" required></label></div>
+<label>Address (Boise or Eagle)<input name="address" autocomplete="street-address" required></label>
 <label>Notes (gates, pets, anything we should know)<textarea name="notes" rows="3"></textarea></label>
+</div>
+</section>
+
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-<button>Send request</button></form></main>
-<script src="/pricing.js"></script>
+<button type="submit" class="btn big" id="submit">Book a wash</button>
+<p class="fine center">We'll confirm your booking and final price. You pay after the job.</p>
+</form></main>
+<script src="/pricing.js"></script><script src="/estimator.js"></script><script src="/scheduler.js"></script>
 <script>
 (function () {
-  var s = document.getElementById('s'), t = document.getElementById('t'), est = document.getElementById('est');
-
-  function getStories() {
-    var r = document.querySelector('input[name="stories"]:checked');
-    return r ? Number(r.value) : 1;
-  }
-  function whole(v) { var n = parseInt(v, 10); return isNaN(n) ? 0 : Math.min(Math.max(n, 0), 200); }
-
-  function update() {
-    var small = whole(s.value), standard = whole(t.value);
-    if (!small && !standard) { est.textContent = ''; return; }
-    est.textContent = 'Estimate: $' + window.calcQuote(small, standard, getStories()).price + ' (final price confirmed by us)';
-  }
-
-  // Fill the form from the home page estimate box (if they came from there)
-  var q = new URLSearchParams(location.search);
-  if (q.has('small')) { s.value = whole(q.get('small')); }
-  if (q.has('standard')) { t.value = whole(q.get('standard')); }
-  if (q.get('stories') === '2') { document.querySelector('input[name="stories"][value="2"]').checked = true; }
-
-  // Don't allow dates in the past
-  var now = new Date();
-  document.getElementById('d').min = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-
-  s.addEventListener('input', update);
-  t.addEventListener('input', update);
-  document.querySelectorAll('input[name="stories"]').forEach(function (r) { r.addEventListener('change', update); });
-  update();
+  var quote = document.querySelector('[data-quote]');
+  var submit = document.getElementById('submit');
+  function ready() { return !!(quote.quoteState && quote.quoteState.ready); }
+  submit.disabled = !ready();
+  quote.addEventListener('quotechange', function () { submit.disabled = !ready(); });
+  document.getElementById('book-form').addEventListener('submit', function (e) { if (!ready()) { e.preventDefault(); } });
 })();
 </script></body></html>

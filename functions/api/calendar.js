@@ -5,17 +5,25 @@ export async function onRequestGet({ request, env }) {
   const { results } = await env.DB.prepare("SELECT * FROM bookings WHERE status != 'cancelled'").all();
   const esc = s => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
   const fold = l => (l.match(/.{1,70}/g) || ['']).join('\r\n ');
-  const slot = { Morning: ['090000', '120000'], Afternoon: ['130000', '160000'] }; // "Any time" uses 9-12
+  const legacy = { Morning: ['090000', '120000'], Afternoon: ['130000', '160000'] }; // older bookings
+  const hms = (h, m) => String(h).padStart(2, '0') + String(m).padStart(2, '0') + '00';
+  const VISIT_HOURS = 2; // how long each visit shows on your calendar
+  const slot = t => {
+    const m = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(t || '');
+    if (!m) return legacy[t] || legacy.Morning;
+    const h = (+m[1] % 12) + (m[3] === 'PM' ? 12 : 0);
+    return [hms(h, +m[2]), hms(Math.min(h + VISIT_HOURS, 23), +m[2])];
+  };
   const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//window-washing//EN', 'X-WR-CALNAME:Window Washing', 'X-PUBLISHED-TTL:PT1H', 'REFRESH-INTERVAL;VALUE=DURATION:PT1H'];
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//window-washing//EN', 'X-WR-CALNAME:Sightline Window Cleaning', 'X-PUBLISHED-TTL:PT1H', 'REFRESH-INTERVAL;VALUE=DURATION:PT1H'];
   for (const b of results) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(b.pref_date || '')) continue;
-    const d = b.pref_date.replace(/-/g, ''), [s, e] = slot[b.pref_time] || slot.Morning;
+    const d = b.pref_date.replace(/-/g, ''), [s, e] = slot(b.pref_time);
     const maps = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(b.address);
     const tag = b.status === 'requested' ? '[Requested] ' : b.status === 'completed' ? '[Done] ' : '';
     lines.push('BEGIN:VEVENT', `UID:booking-${b.id}@window-washing`, `DTSTAMP:${stamp}`, `DTSTART:${d}T${s}`, `DTEND:${d}T${e}`,
       `SUMMARY:${esc(`${tag}${b.name} - $${b.estimate}`)}`, `LOCATION:${esc(b.address)}`,
-      `DESCRIPTION:${esc(`${b.phone}\n${b.small} small, ${b.standard} standard, ${b.stories === 2 ? '2' : '1'}-story\nTime wanted: ${b.pref_time}\n${b.notes || ''}\nDirections: ${maps}`)}`,
+      `DESCRIPTION:${esc(`${b.phone}\n${b.small} small, ${b.standard} standard, ${b.stories === 2 ? '2' : '1'}-story\nTime: ${b.pref_time}\n${b.notes || ''}\nDirections: ${maps}`)}`,
       `STATUS:${b.status === 'requested' ? 'TENTATIVE' : 'CONFIRMED'}`, 'END:VEVENT');
   }
   lines.push('END:VCALENDAR');
