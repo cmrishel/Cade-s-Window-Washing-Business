@@ -1,13 +1,15 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book a wash | Sightline Window Cleaning</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/style.css"></head><body><header class="top"><nav><a class="nav-link" href="/#pricing">Pricing</a><a class="brand" href="/">Sightline <span>Window Cleaning</span></a><a class="nav-cta" href="/book.html">Book a wash</a></nav></header><section class="band"><div class="band-in"><h1>Book a wash</h1><p class="lead">Choose your windows and a day. We confirm your booking and the final price. You pay after the job.</p></div></section><main>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book a wash | Sightline Window Cleaning</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/style.css"></head><body><header class="top"><nav><a class="nav-link" href="/#pricing">Pricing</a><a class="brand" href="/">Sightline <span>Window Cleaning</span></a><a class="nav-cta" href="/book.html">Book a wash</a></nav></header><section class="band"><div class="band-in"><h1>Book a wash</h1><p class="lead">Choose your windows and a day. You'll get a text or email that we received your request. We confirm your day, time, and final price when we arrive. You pay after the job.</p></div></section><main>
 <form method="post" action="/api/book" id="book-form">
 
 <section class="fsec"><h2 class="fh">1. Your windows</h2>
 <div class="quote" data-quote data-prefill>
 <div class="q-layout">
 <div class="q-controls">
+<fieldset class="seg-wrap"><legend>Property</legend>
+<div class="seg"><label><input type="radio" name="property" value="residential" checked><span>Residential</span></label><label><input type="radio" name="property" value="commercial"><span>Commercial</span></label></div></fieldset>
 <fieldset class="seg-wrap"><legend>Service</legend>
 <div class="seg"><label><input type="radio" name="service" value="exterior" checked><span>Exterior</span></label><label><input type="radio" name="service" value="interior"><span>Interior<em>Soon</em></span></label></div></fieldset>
-<fieldset class="seg-wrap"><legend>Home height</legend>
+<fieldset class="seg-wrap"><legend data-height-legend>Home height</legend>
 <div class="seg"><label><input type="radio" name="stories" value="1" checked><span>1 story</span></label><label><input type="radio" name="stories" value="2"><span>2 story</span></label><label><input type="radio" name="stories" value="3"><span>3 story<em>Soon</em></span></label></div></fieldset>
 <div class="q-sliders" data-sliders>
 <div class="q-row"><div class="q-top"><label for="q-small">Small windows</label><output data-out="small" for="q-small">2</output></div><input type="range" id="q-small" name="small" min="0" max="40" value="2"></div>
@@ -15,7 +17,8 @@
 </div>
 <div class="q-soon" data-soon hidden><b>Coming soon</b><p data-soon-text></p></div>
 </div>
-<div class="q-action"><div class="q-result" aria-live="polite"><span>Estimate</span><b data-out="price">$0</b></div></div>
+<div class="q-action"><div class="q-result" aria-live="polite"><span>Estimate</span><b data-out="price">$0</b><s data-out="was" hidden></s></div>
+<div class="promo"><label for="promo">Promo code</label><div class="promo-row"><input id="promo" name="promo" data-promo-input autocomplete="off" maxlength="30"><button type="button" data-promo-apply>Apply</button></div><p class="promo-msg" data-promo-msg role="status"></p></div></div>
 </div>
 <p class="scope">Exterior cleaning. Screens and tracks you can reach from the outside are included. Nothing requires entering your home.</p></div></section>
 
@@ -38,14 +41,14 @@
 <div class="fields">
 <label>Name<input name="name" autocomplete="name" required></label>
 <div class="row"><label>Phone<input name="phone" type="tel" autocomplete="tel" required></label><label>Email<input name="email" type="email" autocomplete="email" required></label></div>
-<label>Address (Boise or Eagle)<input name="address" autocomplete="street-address" required></label>
+<label>Address (Boise, Eagle, or Meridian)<input name="address" autocomplete="street-address" required></label>
 <label>Notes (gates, pets, anything we should know)<textarea name="notes" rows="3"></textarea></label>
 </div>
 </section>
 
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button type="submit" class="btn big" id="submit">Book a wash</button>
-<p class="fine center">We'll confirm your booking and final price. You pay after the job.</p>
+<p class="fine center">We don't confirm by text or email. Your day, time, and final price are confirmed when we arrive for the job. You pay after the job. By booking, you agree to get a text or email about this booking.</p>
 </form></main>
 <script src="/pricing.js"></script><script src="/estimator.js"></script><script src="/scheduler.js"></script>
 <script>

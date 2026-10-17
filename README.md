@@ -42,3 +42,20 @@ Interior cleaning and 3-story homes show "Coming soon" in the quote box and can'
 2. `npx wrangler d1 execute window-washing --remote --file=schema.sql`
 3. Connect the GitHub repo in Cloudflare Pages. Build command: none. Output directory: `public`.
 4. 1/2-story column: run `add-stories.sql` once (skip if you already did).
+
+## Promo codes
+Edit `functions/_lib/promos.js` (the list at the top). Codes are checked on the server, so customers can't see the list.
+Share a code directly or add it to a link: `yoursite.com/book.html?promo=WELCOME10` fills it in automatically.
+
+## Commercial / residential
+The quote box has a Residential / Commercial toggle. Commercial costs the same by default. To charge more,
+set `commercialPercent` in `public/pricing.js` AND `COMMERCIAL_PERCENT` at the top of `functions/api/book.js`.
+
+## "Booking received" messages to customers
+Sent automatically when someone books. Each one only turns on when its settings exist (Cloudflare > Settings > Variables and Secrets):
+- Email: `RESEND_API_KEY`, `FROM_EMAIL` (must be an address on a domain verified in Resend, or emails to customers won't send). `OWNER_EMAIL` gets your alert.
+- Text: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM` (your Twilio number). US business texting requires registering your number with Twilio first.
+
+## Database update (run once)
+`npx wrangler d1 execute window-washing --remote --file=add-commercial-promo.sql`
+(Bookings still save if you forget, but property and promo then go into the notes instead of their own fields.)
